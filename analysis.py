@@ -44,7 +44,7 @@ def main_process():
     date_inf = today.replace(year=today.year - 1)
     departamentos = "'CUNDINAMARCA', 'BOYACÁ'"
     query = f"departamento in ({departamentos}) AND fechaobservacion >= '{date_inf}'"
-    cantidad_filas = 500
+    cantidad_filas = 5000
 
     for set_data in url_api:
 
