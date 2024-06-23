@@ -3,20 +3,16 @@ ARG PORT=443
 FROM cypress/browsers:latest
 
 
-# Dockerfile
-FROM railwayapp/python:3.11
+RUN apt-get install python3 -y
 
-WORKDIR /main
+RUN echo $(python3 -m site --user-base)
 
-# Instalar dependencias del sistema y herramientas
-RUN apt-get update && apt-get install -y python3-venv
+COPY requirements.txt  .
 
-# Copiar y instalar requerimientos
-COPY requirements.txt requirements.txt
-RUN python3 -m venv venv
-RUN . venv/bin/activate && pip install -r requirements.txt
+ENV PATH /home/root/.local/bin:${PATH}
 
-# Copiar el resto del código de la aplicación
+RUN  apt-get update && apt-get install -y python3-pip && pip install -r requirements.txt  
+
 COPY . .
 
-CMD ["python", "main.py"]
+CMD uvicorn main:app --host 0.0.0.0 --port $PORT
