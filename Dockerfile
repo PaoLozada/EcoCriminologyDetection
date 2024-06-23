@@ -1,33 +1,30 @@
-ARG PORT=443
+# Usar una imagen base adecuada
+FROM python:3.11-slim
 
-FROM cypress/browsers:latest
+# Instalar herramientas de compilación y dependencias
+RUN apt-get update && apt-get install -y gcc build-essential libssl-dev libffi-dev
 
-# Instalar Python, virtualenv y herramientas de desarrollo
-RUN apt-get update && apt-get install -y python3 python3-venv python3-pip build-essential libssl-dev libffi-dev python3-dev
+# Crear un directorio de trabajo
+WORKDIR /app
 
-# Crear un entorno virtual
-RUN python3 -m venv /opt/venv
-
-# Activar el entorno virtual y actualizar pip
-RUN /opt/venv/bin/pip install --upgrade pip
-
-# Copiar el archivo requirements.txt
+# Copiar requirements.txt y otros archivos necesarios
 COPY requirements.txt .
 
-# Instalar dependencias en el entorno virtual
-RUN /opt/venv/bin/pip install --upgrade 'setuptools<60' wheel
+# Instalar dependencias generales
+RUN pip install --upgrade pip setuptools wheel
 
-# Instalar httptools
-RUN /opt/venv/bin/pip install httptools
+# Instalar dependencias del sistema
+RUN pip install -r requirements.txt
 
-# Instalar dependencias desde requirements.txt
-RUN /opt/venv/bin/pip install -r requirements.txt
+# Instalar httptools manualmente
+RUN git clone https://github.com/MagicStack/httptools.git && \
+    cd httptools && \
+    python setup.py install
 
-# Copiar el resto del código
+# Copiar tu aplicación
 COPY . .
 
-# Establecer la variable de entorno para usar el entorno virtual
-ENV PATH="/opt/venv/bin:$PATH"
+# Configurar variables de entorno, etc.
 
 # Comando para ejecutar la aplicación
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "443"]
