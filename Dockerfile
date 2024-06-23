@@ -2,29 +2,26 @@ ARG PORT=443
 
 FROM cypress/browsers:latest
 
-# Instalar dependencias del sistema
-RUN apt-get update && apt-get install -y \
-    python3-pip \
-    python3-dev \
-    build-essential \
-    libffi-dev \
-    libssl-dev \
-    libxml2-dev \
-    libxslt1-dev \
-    zlib1g-dev
+# Instalar Python y virtualenv
+RUN apt-get update && apt-get install -y python3 python3-venv python3-pip
 
-# Crear el entorno virtual
+# Crear un entorno virtual
 RUN python3 -m venv /opt/venv
 
-# Copiar el archivo requirements.txt y activar el entorno virtual
-COPY requirements.txt .
-ENV PATH="/opt/venv/bin:$PATH"
-
-# Instalar las dependencias en el entorno virtual
+# Activar el entorno virtual y actualizar pip
 RUN /opt/venv/bin/pip install --upgrade pip
+
+# Copiar el archivo requirements.txt
+COPY requirements.txt .
+
+# Instalar dependencias en el entorno virtual
 RUN /opt/venv/bin/pip install -r requirements.txt
 
 # Copiar el resto del código
 COPY . .
 
-CMD uvicorn main:app --host 0.0.0.0 --port $PORT
+# Establecer la variable de entorno para usar el entorno virtual
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Comando para ejecutar la aplicación
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "443"]
