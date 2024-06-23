@@ -3,7 +3,7 @@ ARG PORT=443
 FROM cypress/browsers:latest
 
 # Instalar Python, virtualenv y herramientas de desarrollo
-RUN apt-get update && apt-get install -y python3 python3-venv python3-pip build-essential libssl-dev libffi-dev
+RUN apt-get update && apt-get install -y python3 python3-venv python3-pip build-essential libssl-dev libffi-dev python3-dev
 
 # Crear un entorno virtual
 RUN python3 -m venv /opt/venv
@@ -15,6 +15,8 @@ RUN /opt/venv/bin/pip install --upgrade pip
 COPY requirements.txt .
 
 # Instalar dependencias en el entorno virtual
+RUN /opt/venv/bin/pip install --upgrade 'setuptools<60' wheel
+RUN /opt/venv/bin/pip install --prefer-binary httptools==0.4.0
 RUN /opt/venv/bin/pip install -r requirements.txt
 
 # Copiar el resto del código
