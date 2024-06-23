@@ -16,7 +16,7 @@ RUN pip install --upgrade pip setuptools wheel
 # Instalar dependencias del sistema
 RUN pip install -r requirements.txt
 
-# Instalar httptools manualmente
+# Instalar httptools manualmente desde el repositorio
 RUN git clone https://github.com/MagicStack/httptools.git && \
     cd httptools && \
     python setup.py install
