@@ -13,7 +13,7 @@ COPY requirements.txt .
 # Instalar dependencias generales
 RUN pip install --upgrade pip setuptools wheel
 
-# Instalar dependencias del sistema
+# Instalar dependencias del sistema desde requirements.txt
 RUN pip install -r requirements.txt
 
 # Instalar httptools manualmente desde el repositorio
