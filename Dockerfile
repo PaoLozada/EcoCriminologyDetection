@@ -16,6 +16,7 @@ COPY requirements.txt .
 
 # Instalar dependencias en el entorno virtual
 RUN /opt/venv/bin/pip install --upgrade 'setuptools<60' wheel
+RUN apt-get install -y gcc
 RUN /opt/venv/bin/pip install --prefer-binary httptools==0.4.0
 RUN /opt/venv/bin/pip install -r requirements.txt
 
