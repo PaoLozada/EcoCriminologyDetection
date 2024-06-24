@@ -2,7 +2,8 @@
 FROM python:3.11-slim
 
 # Instalar herramientas de compilación y dependencias
-RUN apt-get update && apt-get install -y gcc build-essential libssl-dev libffi-dev
+RUN apt-get update && \
+    apt-get install -y gcc build-essential libssl-dev libffi-dev
 
 # Crear un directorio de trabajo
 WORKDIR /app
