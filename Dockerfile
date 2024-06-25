@@ -14,7 +14,7 @@ COPY requirements.txt .
 RUN pip install --upgrade pip setuptools wheel
 
 # Instalar dependencias del sistema
-RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt || echo "Failed to install requirements. Continuing..."
 
 # Instalar httptools manualmente
 RUN git clone https://github.com/MagicStack/httptools.git && \
@@ -26,7 +26,7 @@ RUN git clone https://github.com/MagicStack/httptools.git && \
 COPY . .
 
 # Exponer el puerto
-EXPOSE 443
+EXPOSE 8000
 
 # Comando para ejecutar la aplicación
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "443"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

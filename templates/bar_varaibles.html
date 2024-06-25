@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Environmental Analysis</title>
     <link rel="shortcut icon" href="../img/a.png" type="image/x-ico">
-    <link rel="stylesheet" href="../../static/css/styles.css">
+    <link rel="stylesheet" href="../static/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
 
 
 </head>
@@ -19,42 +19,21 @@
         <nav>
             <div class="nav-wrapper">
 
-                <ul id="nav-mobile" class="right hide-on-med-and-down">
-                    <li><a href="index.html#problema">Problema</a></li>
-                    <li><a href="index.html#solucion">Solución</a></li>
-                    <li><a href="index.html#causasefectos">Causas-Efectos</a></li>
-                    <li><a href="index.html#analsis">Análisis de Datos</a></li>
-                </ul>
+
             </div>
         </nav>
     </div>
-
-    <h1>Environmental Analysis Dashboard</h1>
+    <h1>IMPORTANCIAS DE LAS VARIABLES EN LAS PREDICCIONES</h1>
     <div class="container">
-        <button onclick="location.href= 'http://localhost:8000/create_histogram'" class="btn-info" target="_blank">SHOW
-            DIST. PREDICTIONS</button>
-        <button onclick="location.href= 'http://localhost:8000/create_bar_chart'" class="btn-info" target="_blank">SHOW
-            PROBABILITY RESULTS</button>
-        <button onclick="location.href= 'http://localhost:8000/create_map'" class="btn-info" target="_blank">SHOW
-            MAP</button>
-        <button
-            onclick="location.href= 'file:///C:/Users/paloz/Documents/IA/USA/Class/PROGRAMACI%C3%93N/PROJECT_AI/static/inter_variables.html'"
-            class="btn-info" target="_blank">SHOW
-            RELEVANCE VAR.</button>
-        <h1 class="mt-5">Processed Data</h1>
-        <div>
-            {{ df_table | safe }}
-        </div>
+        <iframe src="/static/inter_variables.html" width="100%" height="500px"></iframe>
     </div>
-
-
-
     <footer class="footer footerpao">
         <div class="container">
             <div class="row">
                 <div class="col l6 s12">
                     <h5 class="white-text">RECURSOS</h5>
-                    <p class="grey-text text-lighten-4">Fuentes de datos para análisis y herramientas para desarrollo
+                    <p class="grey-text text-lighten-4">Fuentes de datos para análisis y herramientas para
+                        desarrollo
                         del proeycto.</p>
                 </div>
                 <div class="col l4 offset-l2 s12">
@@ -63,13 +42,17 @@
                         <li><a class="grey-text text-lighten-3" href="https://www.datos.gov.co" target="_blank">DATOS
                                 ABIERTOS DE COLOMBIA</a></li>
                         <li><a class="grey-text text-lighten-3"
-                                href="https://www.minambiente.gov.co/recuerde-cuales-son-los-delitos-ambientales-que-se-penalizan-en-colombia/">MIN
+                                href="https://www.minambiente.gov.co/recuerde-cuales-son-los-delitos-ambientales-que-se-penalizan-en-colombia/"
+                                target="_blank">MIN
                                 AMBIENTE Y DESARROLLO</a></li>
-                        <li><a class="grey-text text-lighten-3" href="https://www.car.gov.co/">CORP. AUTÓNOMA REG.
-                                CUND.</a></li>
+                        <li><a class="grey-text text-lighten-3" href="https://www.car.gov.co/" target="_blank">CORP.
+                                AUTÓNOMA
+                                REG. CUND.</a></li>
                         <li><a class="grey-text text-lighten-3"
                                 href="https://www.mintic.gov.co/portal/inicio/">MINTIC</a></li>
-                        <li><a class="grey-text text-lighten-3" href="https://www.usergioarboleda.edu.co/">USA</a></li>
+                        <li><a class="grey-text text-lighten-3" href="https://www.usergioarboleda.edu.co/"
+                                target="_blank">USA</a>
+                        </li>
 
                     </ul>
                 </div>
