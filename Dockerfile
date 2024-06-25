@@ -1,32 +1,36 @@
-# Usar una imagen base adecuada
+# Use a slim Python base image
 FROM python:3.11-slim
 
-# Instalar herramientas de compilación y dependencias
-RUN apt-get update && apt-get install -y gcc build-essential libssl-dev libffi-dev git
+# Install necessary system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    build-essential \
+    libssl-dev \
+    libffi-dev \
+    git \
+    && apt-get clean
 
-# Crear un directorio de trabajo
+# Set the working directory
 WORKDIR /app
 
-# Copiar requirements.txt
+# Copy requirements.txt
 COPY requirements.txt .
 
-# Instalar dependencias generales
+# Install Python dependencies
 RUN pip install --upgrade pip setuptools wheel
+RUN pip install -r requirements.txt
 
-# Instalar dependencias del sistema
-RUN pip install -r requirements.txt || echo "Failed to install requirements. Continuing..."
-
-# Instalar httptools manualmente
+# Manually install httptools
 RUN git clone https://github.com/MagicStack/httptools.git && \
     cd httptools && \
     python setup.py install && \
     cd .. && rm -rf httptools
 
-# Copiar tu aplicación
+# Copy the rest of the application code
 COPY . .
 
-# Exponer el puerto
+# Expose the port FastAPI will run on
 EXPOSE 8000
 
-# Comando para ejecutar la aplicación
+# Command to run the application
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
