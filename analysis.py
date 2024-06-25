@@ -7,7 +7,8 @@ from test_and_train import *
 import folium
 from folium.plugins import MarkerCluster
 import itertools
-from mpld3 import fig_to_html
+#from mpld3 import fig_to_html
+import plotly.graph_objects as go
 
 def main_process():
 
@@ -44,7 +45,7 @@ def main_process():
     date_inf = today.replace(year=today.year - 1)
     departamentos = "'CUNDINAMARCA', 'BOYACÁ'"
     query = f"departamento in ({departamentos}) AND fechaobservacion >= '{date_inf}'"
-    cantidad_filas = 5000
+    cantidad_filas = 500
 
     for set_data in url_api:
 
@@ -306,80 +307,84 @@ def create_histogram():
 
     df_predictions = pd.read_csv('static/df_predictions.csv')
 
-    plt.figure(figsize=(10, 6))
-    plt.hist(df_predictions['Level Deforestation'], bins=20, alpha=0.5, label='Deforestación')
-    plt.hist(df_predictions['Level Illicit Use'], bins=20, alpha=0.5, label='Uso Ilícito')
-    plt.hist(df_predictions['Level Ecocidios'], bins=20, alpha=0.5, label='Ecocidios')
-    plt.hist(df_predictions['Level Environment Pollution'], bins=20, alpha=0.5, label='Contaminación')
-    plt.xlabel('Probabilidad (%)')
-    plt.ylabel('Frecuencia')
-    plt.legend()
-    # Convert the Matplotlib figure to interactive HTML
-    html_content = fig_to_html(plt.gcf())
+    # Crear la figura de Plotly
+    fig = go.Figure()
 
-    # Write the HTML content to a file (optional)
-    with open('static/interactive_histogram.html', 'w') as f:
-        f.write(html_content)
+    # Añadir los histogramas a la figura
+    fig.add_trace(go.Histogram(x=df_predictions['Level Deforestation'], name='Deforestación', opacity=0.5))
+    fig.add_trace(go.Histogram(x=df_predictions['Level Illicit Use'], name='Uso Ilícito', opacity=0.5))
+    fig.add_trace(go.Histogram(x=df_predictions['Level Ecocidios'], name='Ecocidios', opacity=0.5))
+    fig.add_trace(go.Histogram(x=df_predictions['Level Environment Pollution'], name='Contaminación', opacity=0.5))
 
+    # Actualizar el diseño de la figura
+    fig.update_layout(
+        title='Distribución de las predicciones de probabilidades',
+        xaxis_title='Probabilidad (%)',
+        yaxis_title='Frecuencia',
+        barmode='overlay'
+    )
+
+    # Guardar la figura como archivo HTML interactivo
+    fig.write_html('static/interactive_histogram.html')
 
 # Gráfico de barras con probabilidades por estación
 
 def create_bar_chart():
     df_predictions = pd.read_csv('static/df_predictions.csv')
 
-    # Configuración para la gráfica
-    plt.figure(figsize=(10, 6))
-    bar_width = 0.3
-    opacity = 0.8
-
-    # Posiciones de las barras en el eje x
-    station_indices = range(len(df_predictions))
-
-    # Graficar la deforestación
-    bars1 = plt.bar(station_indices, df_predictions['Level Deforestation'], bar_width, alpha=opacity, color='b', label='Deforestación')
-
-    # Graficar Uso Ilicito
-    bars2 = plt.bar([i + bar_width for i in station_indices], df_predictions['Level Illicit Use'], bar_width, alpha=opacity, color='g', label='Uso Ilicito')
-
-    # Graficar los ecocidios
-    bars3 = plt.bar([i + 2 * bar_width for i in station_indices], df_predictions['Level Ecocidios'], bar_width, alpha=opacity, color='r', label='Ecocidios')
-
-    # Graficar polución
-    bars4 = plt.bar([i + 4 * bar_width for i in station_indices], df_predictions['Level Environment Pollution'], bar_width, alpha=opacity, color='y', label='Polución')
-
-    # Etiquetas de estaciones en el eje x
-    plt.xlabel('Municipio')
-    plt.ylabel('Probabilidad/Valor')
-   
-
     municipio_grap = []
     for _, row in df_predictions.iterrows():    
-        municipio_grap.append(row['municipio'])
+        municipio_grap.append(df_predictions.loc[df_predictions['codigoestacion'] == row['codigoestacion'], 'municipio'].iloc[0])
 
-    plt.xticks([i + bar_width for i in station_indices], municipio_grap, rotation=80, color='white')
-    plt.legend()
 
-    # Añadir líneas verticales entre las barras
-    for i in range(len(df_predictions)):
-        plt.axvline(x=i + bar_width, color='gray', linestyle='--', linewidth=0.5)
+    # Crear una figura de Plotly
+    fig = go.Figure()
+
+    # Añadir barras de deforestación
+    fig.add_trace(go.Bar(
+        x=municipio_grap,
+        y=df_predictions['Level Deforestation'],
+        name='Deforestación',
+        marker_color='blue'
+    ))
+
+    # Añadir barras de uso ilícito
+    fig.add_trace(go.Bar(
+        x=municipio_grap,
+        y=df_predictions['Level Illicit Use'],
+        name='Uso Ilícito',
+        marker_color='green'
+    ))
+
+    # Añadir barras de ecocidios
+    fig.add_trace(go.Bar(
+        x=municipio_grap,
+        y=df_predictions['Level Ecocidios'],
+        name='Ecocidios',
+        marker_color='red'
+    ))
+
+    # Añadir barras de polución
+    fig.add_trace(go.Bar(
+        x=municipio_grap,
+        y=df_predictions['Level Environment Pollution'],
+        name='Polución',
+        marker_color='yellow'
+    ))
+
+    # Actualizar el layout
+    fig.update_layout(
+        title='Probabilidad de Ocurrencia de Variables por Municipio',
+        xaxis_title='Municipio',
+        yaxis_title='Probabilidad/Valor',
+        barmode='group',
+        xaxis_tickangle=-45
+    )
 
     # Añadir etiquetas a las barras
-    def add_labels(bars):
-        for bar in bars:
-            yval = bar.get_height()
-            plt.text(bar.get_x() + bar.get_width() / 2, yval + 0.02, round(yval, 2), ha='center', va='bottom', fontsize=7)
+    for trace in fig.data:
+        trace.text = trace.y
+        trace.textposition = 'auto'
 
-    add_labels(bars1)
-    add_labels(bars2)
-    add_labels(bars3)
-    add_labels(bars4)
-
-    plt.tight_layout()
-
-   
-    # Convert the Matplotlib figure to interactive HTML
-    html_content = fig_to_html(plt.gcf())
-
-    # Write the HTML content to a file (optional)
-    with open('static/interactive_bar_chart.html', 'w') as f:
-        f.write(html_content)
+    # Exportar la figura a HTML
+    fig.write_html('static/interactive_bar_chart.html')

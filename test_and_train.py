@@ -3,6 +3,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 import matplotlib.pyplot as plt
+import plotly.graph_objects as go
 
     
 
@@ -79,6 +80,30 @@ def train_predict(df_historical, df_new_data, measure_var, new_columns_corr):
     plt.tight_layout()
     plt.show()
 '''
+    # Importancia de las Características
+
+    importances = model_def.feature_importances_
+    features = X.columns
+    indices = np.argsort(importances)[::-1]
+    # Crear la figura con Plotly
+    fig = go.Figure()
+
+    # Agregar una barra
+    fig.add_trace(go.Bar(
+        x=[features[i] for i in indices],
+        y=importances[indices]
+    ))
+
+    # Configurar el título y las etiquetas del eje
+    fig.update_layout(
+        title='Importancia de las características',
+        xaxis_title='Características',
+        yaxis_title='Importancia',
+        xaxis_tickangle=-90
+    )
+
+    # Exportar la figura a HTML
+    fig.write_html('static/inter_variables.html')
     
 
     return df_new_data

@@ -186,7 +186,7 @@ h1 {
 
 .vision {
     background-color: #000;
-    padding-bottom: 30px;
+    padding-bottom: 40px;
 }
 
 .vision h2 {
@@ -206,7 +206,9 @@ h1 {
     background-size: cover;
     background-attachment: fixed;
     color: #0b0b0b;
+    padding: 100px;
 }
+
 
 
 .fondo {
