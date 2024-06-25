@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
     libssl-dev \
     libffi-dev \
     git \
+    cmake \
     && apt-get clean
 
 # Set the working directory
@@ -18,6 +19,11 @@ COPY requirements.txt .
 
 # Install Python dependencies
 RUN pip install --upgrade pip setuptools wheel
+
+# Install httptools separately to handle potential issues
+RUN pip install httptools==0.3.0
+
+# Install the rest of the dependencies
 RUN pip install -r requirements.txt
 
 # Copy the rest of the application code

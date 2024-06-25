@@ -155,9 +155,10 @@ h1 {
 }
 
 .carousel {
-
+    width: 1000%;
     height: 100vh;
     margin: 0 auto;
+    padding: 0;
 
 }
 
@@ -165,10 +166,14 @@ h1 {
     width: 500px;
 }
 
+
+
 .carousel .carousel-item img {
     width: 550px;
-    height: 450px;
-    margin-top: -13vw;
+    height: 350px;
+    margin-top: -3vw;
+
+
 }
 
 .carousel .carousel-item h5 {
