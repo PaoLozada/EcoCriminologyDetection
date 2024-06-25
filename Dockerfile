@@ -20,10 +20,7 @@ COPY requirements.txt .
 # Install Python dependencies
 RUN pip install --upgrade pip setuptools wheel
 
-# Install httptools separately to handle potential issues
-RUN pip install httptools==0.3.0
-
-# Install the rest of the dependencies
+# Install Python dependencies from requirements.txt
 RUN pip install -r requirements.txt
 
 # Copy the rest of the application code
